@@ -1,33 +1,25 @@
 import http from "../http-common";
 
-class TutorialDataService {
+class TareasDataService {
   getAll() {
-    return http.get("/tutorials");
+    return http.get("/tareas");
   }
 
   get(id) {
-    return http.get(`/tutorials/${id}`);
+    return http.get(`/tareas/${id}`);
   }
 
   create(data) {
-    return http.post("/tutorials", data);
+    return http.post("/tareas", data);
   }
 
   update(id, data) {
-    return http.put(`/tutorials/${id}`, data);
+    return http.put(`/tareas/${id}`, data);
   }
 
   delete(id) {
-    return http.delete(`/tutorials/${id}`);
-  }
-
-  deleteAll() {
-    return http.delete(`/tutorials`);
-  }
-
-  findByTitle(title) {
-    return http.get(`/tutorials?title=${title}`);
+    return http.delete(`/tareas/${id}`);
   }
 }
 
-export default new TutorialDataService();
+export default new TareasDataService();

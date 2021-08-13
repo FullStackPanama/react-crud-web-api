@@ -1,60 +1,45 @@
 import React, { Component } from "react";
-import TutorialDataService from "../services/tarea.service";
+import TareasDataService from "../services/tarea.service";
 
-export default class Tutorial extends Component {
+export default class Tarea extends Component {
   constructor(props) {
     super(props);
-    this.onChangeTitle = this.onChangeTitle.bind(this);
     this.onChangeDescription = this.onChangeDescription.bind(this);
-    this.getTutorial = this.getTutorial.bind(this);
-    this.updatePublished = this.updatePublished.bind(this);
-    this.updateTutorial = this.updateTutorial.bind(this);
-    this.deleteTutorial = this.deleteTutorial.bind(this);
+    this.getTarea = this.getTarea.bind(this);
+    this.updateEstado = this.updateEstado.bind(this);
+    this.updateTarea = this.updateTarea.bind(this);
+    this.deleteTarea = this.deleteTarea.bind(this);
 
     this.state = {
-      currentTutorial: {
+      currentTarea: {
         id: null,
-        title: "",
-        description: "",
-        published: false
+        tarea: "",
+        terminada: false
       },
       message: ""
     };
   }
 
   componentDidMount() {
-    this.getTutorial(this.props.match.params.id);
-  }
-
-  onChangeTitle(e) {
-    const title = e.target.value;
-
-    this.setState(function(prevState) {
-      return {
-        currentTutorial: {
-          ...prevState.currentTutorial,
-          title: title
-        }
-      };
-    });
+    this.getTarea(this.props.match.params.id);
   }
 
   onChangeDescription(e) {
     const description = e.target.value;
 
     this.setState(prevState => ({
-      currentTutorial: {
-        ...prevState.currentTutorial,
-        description: description
+      currentTarea: {
+        ...prevState.currentTarea,
+        tarea: description
       }
     }));
   }
 
-  getTutorial(id) {
-    TutorialDataService.get(id)
+  getTarea(id) {
+    TareasDataService.get(id)
       .then(response => {
         this.setState({
-          currentTutorial: response.data
+          currentTarea: response.data
         });
         console.log(response.data);
       })
@@ -63,20 +48,19 @@ export default class Tutorial extends Component {
       });
   }
 
-  updatePublished(status) {
+  updateEstado(status) {
     var data = {
-      id: this.state.currentTutorial.id,
-      title: this.state.currentTutorial.title,
-      description: this.state.currentTutorial.description,
-      published: status
+      id: this.state.currentTarea.id,
+      description: this.state.currentTarea.description,
+      terminada: status
     };
 
-    TutorialDataService.update(this.state.currentTutorial.id, data)
+    TareasDataService.update(this.state.currentTarea.id, data)
       .then(response => {
         this.setState(prevState => ({
-          currentTutorial: {
-            ...prevState.currentTutorial,
-            published: status
+          currentTarea: {
+            ...prevState.currentTarea,
+            terminada: status
           }
         }));
         console.log(response.data);
@@ -86,15 +70,15 @@ export default class Tutorial extends Component {
       });
   }
 
-  updateTutorial() {
-    TutorialDataService.update(
-      this.state.currentTutorial.id,
-      this.state.currentTutorial
+  updateTarea() {
+    TareasDataService.update(
+      this.state.currentTarea.id,
+      this.state.currentTarea
     )
       .then(response => {
         console.log(response.data);
         this.setState({
-          message: "The tutorial was updated successfully!"
+          message: "Tarea actualizada!"
         });
       })
       .catch(e => {
@@ -102,11 +86,11 @@ export default class Tutorial extends Component {
       });
   }
 
-  deleteTutorial() {
-    TutorialDataService.delete(this.state.currentTutorial.id)
+  deleteTarea() {
+    TareasDataService.delete(this.state.currentTarea.id)
       .then(response => {
         console.log(response.data);
-        this.props.history.push('/tutorials')
+        this.props.history.push('/tareas')
       })
       .catch(e => {
         console.log(e);
@@ -114,79 +98,69 @@ export default class Tutorial extends Component {
   }
 
   render() {
-    const { currentTutorial } = this.state;
+    const { currentTarea } = this.state;
 
     return (
       <div>
-        {currentTutorial ? (
+        {currentTarea ? (
           <div className="edit-form">
-            <h4>Tutorial</h4>
+            <h4>Tarea</h4>
             <form>
               <div className="form-group">
-                <label htmlFor="title">Title</label>
+                <label htmlFor="description">Descripción</label>
                 <input
                   type="text"
                   className="form-control"
-                  id="title"
-                  value={currentTutorial.title}
-                  onChange={this.onChangeTitle}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="description">Description</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="description"
-                  value={currentTutorial.description}
+                  id="tarea"
+                  value={currentTarea.tarea}
                   onChange={this.onChangeDescription}
                 />
               </div>
 
               <div className="form-group">
                 <label>
-                  <strong>Status:</strong>
+                  <strong>Estado:</strong>
                 </label>
-                {currentTutorial.published ? "Published" : "Pending"}
+                {currentTarea.terminada ? "Terminada" : "Pendiente"}
               </div>
             </form>
 
-            {currentTutorial.published ? (
+            {currentTarea.terminada ? (
               <button
                 className="badge badge-primary mr-2"
-                onClick={() => this.updatePublished(false)}
+                onClick={() => this.updateEstado(false)}
               >
-                UnPublish
+                Marcar como pendiente
               </button>
             ) : (
               <button
                 className="badge badge-primary mr-2"
-                onClick={() => this.updatePublished(true)}
+                onClick={() => this.updateEstado(true)}
               >
-                Publish
+                Marcar como terminada
               </button>
             )}
 
             <button
               className="badge badge-danger mr-2"
-              onClick={this.deleteTutorial}
+              onClick={this.deleteTarea}
             >
-              Delete
+              Borrar
             </button>
 
             <button
               type="submit"
               className="badge badge-success"
-              onClick={this.updateTutorial}
+              onClick={this.updateTarea}
             >
-              Update
+              Actualizar
             </button>
             <p>{this.state.message}</p>
           </div>
         ) : (
           <div>
             <br />
-            <p>Please click on a Tutorial...</p>
+            <p>Seleccione una tarea...</p>
           </div>
         )}
       </div>

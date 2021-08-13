@@ -1,42 +1,31 @@
 import React, { Component } from "react";
-import TutorialDataService from "../services/tarea.service";
+import TareasDataService from "../services/tarea.service";
 import { Link } from "react-router-dom";
 
-export default class TutorialsList extends Component {
+export default class TareasLista extends Component {
   constructor(props) {
     super(props);
-    this.onChangeSearchTitle = this.onChangeSearchTitle.bind(this);
-    this.retrieveTutorials = this.retrieveTutorials.bind(this);
+    this.getTareas = this.getTareas.bind(this);
     this.refreshList = this.refreshList.bind(this);
-    this.setActiveTutorial = this.setActiveTutorial.bind(this);
-    this.removeAllTutorials = this.removeAllTutorials.bind(this);
-    this.searchTitle = this.searchTitle.bind(this);
+    this.setActiveTarea = this.setActiveTarea.bind(this);
 
     this.state = {
-      tutorials: [],
-      currentTutorial: null,
+      tareas: [],
+      currentTarea: null,
       currentIndex: -1,
       searchTitle: ""
     };
   }
 
   componentDidMount() {
-    this.retrieveTutorials();
+    this.getTareas();
   }
 
-  onChangeSearchTitle(e) {
-    const searchTitle = e.target.value;
-
-    this.setState({
-      searchTitle: searchTitle
-    });
-  }
-
-  retrieveTutorials() {
-    TutorialDataService.getAll()
+  getTareas() {
+    TareasDataService.getAll()
       .then(response => {
         this.setState({
-          tutorials: response.data
+          tareas: response.data
         });
         console.log(response.data);
       })
@@ -46,134 +35,73 @@ export default class TutorialsList extends Component {
   }
 
   refreshList() {
-    this.retrieveTutorials();
+    this.getTareas();
     this.setState({
-      currentTutorial: null,
+      currentTarea: null,
       currentIndex: -1
     });
   }
 
-  setActiveTutorial(tutorial, index) {
+  setActiveTarea(tarea, index) {
     this.setState({
-      currentTutorial: tutorial,
+      currentTarea: tarea,
       currentIndex: index
     });
   }
 
-  removeAllTutorials() {
-    TutorialDataService.deleteAll()
-      .then(response => {
-        console.log(response.data);
-        this.refreshList();
-      })
-      .catch(e => {
-        console.log(e);
-      });
-  }
-
-  searchTitle() {
-    this.setState({
-      currentTutorial: null,
-      currentIndex: -1
-    });
-
-    TutorialDataService.findByTitle(this.state.searchTitle)
-      .then(response => {
-        this.setState({
-          tutorials: response.data
-        });
-        console.log(response.data);
-      })
-      .catch(e => {
-        console.log(e);
-      });
-  }
-
   render() {
-    const { searchTitle, tutorials, currentTutorial, currentIndex } = this.state;
+    const { tareas, currentTarea, currentIndex } = this.state;
 
     return (
       <div className="list row">
-        <div className="col-md-8">
-          <div className="input-group mb-3">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Search by title"
-              value={searchTitle}
-              onChange={this.onChangeSearchTitle}
-            />
-            <div className="input-group-append">
-              <button
-                className="btn btn-outline-secondary"
-                type="button"
-                onClick={this.searchTitle}
-              >
-                Search
-              </button>
-            </div>
-          </div>
-        </div>
         <div className="col-md-6">
-          <h4>Tutorials List</h4>
+          <h4>Listado de tareas</h4>
 
           <ul className="list-group">
-            {tutorials &&
-              tutorials.map((tutorial, index) => (
+            {tareas &&
+              tareas.map((tarea, index) => (
                 <li
                   className={
                     "list-group-item " +
                     (index === currentIndex ? "active" : "")
                   }
-                  onClick={() => this.setActiveTutorial(tutorial, index)}
+                  onClick={() => this.setActiveTarea(tarea, index)}
                   key={index}
                 >
-                  {tutorial.title}
+                  {tarea.tarea}
                 </li>
               ))}
           </ul>
 
-          <button
-            className="m-3 btn btn-sm btn-danger"
-            onClick={this.removeAllTutorials}
-          >
-            Remove All
-          </button>
         </div>
         <div className="col-md-6">
-          {currentTutorial ? (
+          {currentTarea ? (
             <div>
-              <h4>Tutorial</h4>
+              <h4>Tarea</h4>
               <div>
                 <label>
-                  <strong>Title:</strong>
+                  <strong>Descripción:</strong>
                 </label>{" "}
-                {currentTutorial.title}
+                {currentTarea.tarea}
               </div>
               <div>
                 <label>
-                  <strong>Description:</strong>
+                  <strong>Completa: </strong>
                 </label>{" "}
-                {currentTutorial.description}
-              </div>
-              <div>
-                <label>
-                  <strong>Status:</strong>
-                </label>{" "}
-                {currentTutorial.published ? "Published" : "Pending"}
+                {currentTarea.terminada ? "Sí" : "No"}
               </div>
 
               <Link
-                to={"/tutorials/" + currentTutorial.id}
+                to={"/tareas/" + currentTarea.id}
                 className="badge badge-warning"
               >
-                Edit
+                Modificar
               </Link>
             </div>
           ) : (
             <div>
               <br />
-              <p>Please click on a Tutorial...</p>
+              <p>Seleccione una tarea...</p>
             </div>
           )}
         </div>

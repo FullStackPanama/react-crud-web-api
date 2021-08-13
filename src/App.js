@@ -3,27 +3,27 @@ import { Switch, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
-import AddTutorial from "./components/tarea-nueva.component";
-import Tutorial from "./components/tarea.component";
-import TutorialsList from "./components/tareas-lista.component";
+import TareaNueva from "./components/tarea-nueva.component";
+import Tarea from "./components/tarea.component";
+import TareasLista from "./components/tareas-lista.component";
 
 class App extends Component {
   render() {
     return (
       <div>
         <nav className="navbar navbar-expand navbar-dark bg-dark">
-          <Link to={"/tutorials"} className="navbar-brand">
-            bezKoder
+          <Link to={"/tareas"} className="navbar-brand">
+            FullStackPanama
           </Link>
           <div className="navbar-nav mr-auto">
             <li className="nav-item">
-              <Link to={"/tutorials"} className="nav-link">
-                Tutorials
+              <Link to={"/tareas"} className="nav-link">
+                Tareas
               </Link>
             </li>
             <li className="nav-item">
-              <Link to={"/add"} className="nav-link">
-                Add
+              <Link to={"/tarea-nueva"} className="nav-link">
+                Agregar tarea
               </Link>
             </li>
           </div>
@@ -31,9 +31,9 @@ class App extends Component {
 
         <div className="container mt-3">
           <Switch>
-            <Route exact path={["/", "/tutorials"]} component={TutorialsList} />
-            <Route exact path="/add" component={AddTutorial} />
-            <Route path="/tutorials/:id" component={Tutorial} />
+            <Route exact path={["/", "/tareas"]} component={TareasLista} />
+            <Route exact path="/tarea-nueva" component={TareaNueva} />
+            <Route path="/tareas/:id" component={Tarea} />
           </Switch>
         </div>
       </div>

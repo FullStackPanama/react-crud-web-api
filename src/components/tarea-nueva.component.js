@@ -1,49 +1,40 @@
 import React, { Component } from "react";
-import TutorialDataService from "../services/tarea.service";
+import TareasDataService from "../services/tarea.service";
 
-export default class AddTutorial extends Component {
+export default class TareaNueva extends Component {
   constructor(props) {
     super(props);
-    this.onChangeTitle = this.onChangeTitle.bind(this);
     this.onChangeDescription = this.onChangeDescription.bind(this);
-    this.saveTutorial = this.saveTutorial.bind(this);
-    this.newTutorial = this.newTutorial.bind(this);
+    this.saveTarea = this.saveTarea.bind(this);
+    this.newTarea = this.newTarea.bind(this);
 
     this.state = {
       id: null,
-      title: "",
-      description: "",
-      published: false,
+      tarea: "",
+      terminada: false,
 
       submitted: false
     };
   }
 
-  onChangeTitle(e) {
-    this.setState({
-      title: e.target.value
-    });
-  }
-
   onChangeDescription(e) {
     this.setState({
-      description: e.target.value
+      tarea: e.target.value
     });
   }
 
-  saveTutorial() {
+  saveTarea() {
     var data = {
-      title: this.state.title,
-      description: this.state.description
+      tarea: this.state.tarea,
+      terminada: this.state.terminada
     };
 
-    TutorialDataService.create(data)
+    TareasDataService.create(data)
       .then(response => {
         this.setState({
           id: response.data.id,
-          title: response.data.title,
-          description: response.data.description,
-          published: response.data.published,
+          tarea: response.data.tarea,
+          terminada: response.data.terminada,
 
           submitted: true
         });
@@ -54,12 +45,11 @@ export default class AddTutorial extends Component {
       });
   }
 
-  newTutorial() {
+  newTarea() {
     this.setState({
       id: null,
-      title: "",
-      description: "",
-      published: false,
+      tarea: "",
+      terminada: false,
 
       submitted: false
     });
@@ -70,41 +60,29 @@ export default class AddTutorial extends Component {
       <div className="submit-form">
         {this.state.submitted ? (
           <div>
-            <h4>You submitted successfully!</h4>
-            <button className="btn btn-success" onClick={this.newTutorial}>
-              Add
+            <h4>Se ha agregado una nueva tarea!</h4>
+            <button className="btn btn-success" onClick={this.newTarea}>
+              Agregar
             </button>
           </div>
         ) : (
           <div>
-            <div className="form-group">
-              <label htmlFor="title">Title</label>
-              <input
-                type="text"
-                className="form-control"
-                id="title"
-                required
-                value={this.state.title}
-                onChange={this.onChangeTitle}
-                name="title"
-              />
-            </div>
 
             <div className="form-group">
-              <label htmlFor="description">Description</label>
+              <label htmlFor="tarea">Descripción</label>
               <input
                 type="text"
                 className="form-control"
-                id="description"
+                id="tarea"
                 required
-                value={this.state.description}
+                value={this.state.tarea}
                 onChange={this.onChangeDescription}
-                name="description"
+                name="tarea"
               />
             </div>
 
-            <button onClick={this.saveTutorial} className="btn btn-success">
-              Submit
+            <button onClick={this.saveTarea} className="btn btn-success">
+              Guardar
             </button>
           </div>
         )}
