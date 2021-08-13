@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+
+  # database:
+  #   image: mysql:5.6
+  #   command: --default-authentication-plugin=mysql_native_password
+  #   volumes:
+  #     - "./.data/db:/var/lib/mysql"
+  #   restart: unless-stopped
+  #   ports:
+  #     - 3306:3306
+  #   env_file: ../.env
+
+  # api:
+  #   image: nestjs-demo:latest
+  #   restart: unless-stopped
+  #   ports:
+  #     - 3000:3000
+  #   depends_on:
+  #     - database
+
+  app:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+      args:
+        ENVIRONMENT: ${ENVIRONMENT}
+        NODE_VERSION: ${NODE_VERSION}
+        ALPINE_VERSION: ${ALPINE_VERSION}
+    restart: unless-stopped
+    volumes:
+      - "..:/app:rw"
+      - "react_demo-node_modules:/app/node_modules"
+    ports:
+      - "8081:8081"
+    # depends_on:
+    #   - api
+
+volumes:
+  react_demo-node_modules:

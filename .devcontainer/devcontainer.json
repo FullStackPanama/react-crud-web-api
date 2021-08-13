@@ -1,0 +1,21 @@
+{
+  "name": "FullStackPanama-React-Demo",
+  "dockerComposeFile": "./docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/app",
+
+  "settings": {
+    "terminal.integrated.profiles.linux": {
+      "bash": {
+        "path": "/bin/ash"
+      }
+    },
+    "terminal.integrated.defaultProfile.linux": "bash",
+  },
+
+  "extensions": [
+    "github.copilot",
+    "steoates.autoimport",
+  ],
+
+}
