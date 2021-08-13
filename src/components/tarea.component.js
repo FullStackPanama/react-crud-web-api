@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import TutorialDataService from "../services/tutorial.service";
+import TutorialDataService from "../services/tarea.service";
 
 export default class Tutorial extends Component {
   constructor(props) {
@@ -41,7 +41,7 @@ export default class Tutorial extends Component {
 
   onChangeDescription(e) {
     const description = e.target.value;
-    
+
     this.setState(prevState => ({
       currentTutorial: {
         ...prevState.currentTutorial,
@@ -102,7 +102,7 @@ export default class Tutorial extends Component {
       });
   }
 
-  deleteTutorial() {    
+  deleteTutorial() {
     TutorialDataService.delete(this.state.currentTutorial.id)
       .then(response => {
         console.log(response.data);

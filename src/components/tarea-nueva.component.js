@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import TutorialDataService from "../services/tutorial.service";
+import TutorialDataService from "../services/tarea.service";
 
 export default class AddTutorial extends Component {
   constructor(props) {
@@ -12,7 +12,7 @@ export default class AddTutorial extends Component {
     this.state = {
       id: null,
       title: "",
-      description: "", 
+      description: "",
       published: false,
 
       submitted: false
